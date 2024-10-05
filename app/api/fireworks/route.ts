@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     const fileName = v4() + ".jpg";
 
     // ファイルをSupabaseストレージにアップロード
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from(strageName) // バケット名を指定
       .upload(fileName, Buffer.from(buffer), {
         contentType: "image/jpeg", // コンテンツタイプを指定
