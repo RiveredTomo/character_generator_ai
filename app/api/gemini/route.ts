@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 
 const ApiKey = process.env.GEMINI_API_KEY!;
 const genAI = new GoogleGenerativeAI(ApiKey);
@@ -9,18 +9,22 @@ const model = genAI.getGenerativeModel({
     temperature: 2,
     responseMimeType: "application/json",
     responseSchema: {
-      type: "object",
+      type: SchemaType.OBJECT,
       properties: {
         name: {
-          type: "string",
+          type: SchemaType.STRING,
+          nullable: false,
         },
         characteristic: {
-          type: "string",
+          type: SchemaType.STRING,
+          nullable: false,
         },
         imagePrompt: {
-          type: "string",
+          type: SchemaType.STRING,
+          nullable: false,
         },
       },
+      required: ["name", "characteristic", "imagePrompt"], // 必須フィールドを追加
     },
   },
 });
