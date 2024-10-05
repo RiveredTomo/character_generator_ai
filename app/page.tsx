@@ -2,7 +2,7 @@
 
 import CharaInfo from "./components/CharaInfo";
 import { useState } from "react";
-import { IoClose, IoReorderThreeSharp } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 
 export default function Home() {
   const [material_1, setMaterial_1] = useState("");
@@ -72,7 +72,7 @@ export default function Home() {
     <main className="min-h-screen">
       <header className="sticky top-0 z-10 bg-primary text-white w-full">
         <div className="p-2 max-w-screen-xl mx-auto">
-          <button className="text-2xl">{/* <IoReorderThreeSharp /> */}</button>
+          <button className="text-2xl"></button>
         </div>
       </header>
       <div className="my-8 mx-auto px-5 flex items-center flex-col gap-10 max-w-screen-xl">
