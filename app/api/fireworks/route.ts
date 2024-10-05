@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
 import { v4 } from "uuid";
+import { createClient } from "@/utils/supabase/server";
 
 const ApiKey = process.env.FIREWORKS_API_KEY;
 
 export async function POST(req: Request) {
   const reqBody = await req.json();
   const { imagePrompt } = reqBody;
-
-  console.log(imagePrompt);
+  const supabase = createClient();
+  const strageName = process.env.SUPABASE_STORAGE!;
 
   try {
     const response = await fetch(
@@ -38,13 +38,26 @@ export async function POST(req: Request) {
     const buffer = await response.arrayBuffer();
 
     // ファイル名をuuidで生成
-    const fileName = v4();
-    const filePass = "/output/" + fileName + ".jpg";
+    const fileName = v4() + ".jpg";
 
-    // ファイルを書き出し
-    fs.writeFile("public" + filePass, Buffer.from(buffer), () =>
-      console.log("finished downloading!")
-    );
+    // ファイルをSupabaseストレージにアップロード
+    const { data, error } = await supabase.storage
+      .from(strageName) // バケット名を指定
+      .upload(fileName, Buffer.from(buffer), {
+        contentType: "image/jpeg", // コンテンツタイプを指定
+      });
+
+    if (error) {
+      throw error; // エラーが発生した場合は例外をスロー
+    }
+
+    // アップロードしたファイルのURLを取得
+    const urlData = await supabase.storage
+      .from(strageName)
+      .getPublicUrl(fileName);
+    const filePass = urlData.data.publicUrl;
+
+    console.log(filePass);
 
     // 画像表示用のファイルパスを返す
     return NextResponse.json({

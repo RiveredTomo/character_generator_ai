@@ -17,8 +17,8 @@ const CharaInfo = ({ charaName, characteristic, imagePass }: Props) => {
             <Image
               src={imagePass}
               alt="image"
-              width={1000}
-              height={1000}
+              width={1024}
+              height={1024}
               className="rounded-lg"
             />
           ) : (

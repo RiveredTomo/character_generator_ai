@@ -1,43 +1,19 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest } from "next/server";
+import { updateSession } from "@/utils/supabase/middleware";
+
+export async function middleware(request: NextRequest) {
+  return await updateSession(request);
+}
 
 export const config = {
-  matcher: ["/:path*"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
+     */
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };
-
-export function middleware(req: NextRequest) {
-  // 環境変数の設定がない場合はスキップする
-  if (
-    process.env.BASIC_AUTH_USERNAME === undefined ||
-    process.env.BASIC_AUTH_PASSWORD === undefined
-  ) {
-    return NextResponse.next();
-  }
-
-  // BASIC認証のチェック
-  const basicAuth = req.headers.get("authorization");
-
-  if (basicAuth) {
-    const authValue = basicAuth.split(" ")[1];
-    const [username, password] = Buffer.from(authValue, "base64")
-      .toString()
-      .split(":");
-
-    if (
-      username === process.env.BASIC_AUTH_USERNAME &&
-      password === process.env.BASIC_AUTH_PASSWORD
-    ) {
-      // BASIC認証に成功した場合、アクセスを許可する
-      return NextResponse.next();
-    }
-  }
-
-  // BASIC認証に失敗した場合、エラーを表示する
-  return NextResponse.json(
-    { error: "Basic Auth Required" },
-    {
-      // eslint-disable-next-line quotes
-      headers: { "WWW-Authenticate": 'Basic realm="Secure Area"' },
-      status: 401,
-    }
-  );
-}
