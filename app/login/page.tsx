@@ -1,10 +1,15 @@
 "use client";
 
+import { createClient } from "@/utils/supabase/client";
 import { login } from "./actions";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { useRouter } from "next/navigation";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function Login() {
+  const supabase = createClient();
+  const router = useRouter();
+
   return (
     <main className="min-h-screen">
       <Header />
@@ -17,6 +22,7 @@ export default function Login() {
             name="email"
             className="grow w-full"
             placeholder="image@gen.com"
+            required
           />
         </label>
         <label className="input input-primary flex items-center gap-2">
@@ -26,6 +32,7 @@ export default function Login() {
             name="password"
             className="grow"
             placeholder="******"
+            required
           />
         </label>
 
