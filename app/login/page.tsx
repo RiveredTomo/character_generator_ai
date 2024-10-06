@@ -1,15 +1,11 @@
 "use client";
 
-import { createClient } from "@/utils/supabase/client";
+// import { createClient } from "@/utils/supabase/client";
 import { login } from "./actions";
-import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function Login() {
-  const supabase = createClient();
-  const router = useRouter();
-
   return (
     <main className="min-h-screen">
       <Header />
