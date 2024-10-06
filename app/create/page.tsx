@@ -77,7 +77,7 @@ export default function Create() {
       <Header />
       <div className="my-8 mx-auto px-5 flex items-center flex-col gap-10 max-w-screen-xl">
         <h1 className="text-2xl md:text-5xl font-extrabold">
-          融合キャラジェネレーター
+          AIに融合キャラを作ってもらおう
         </h1>
         <p className="md:text-xl text-center">
           「何か」と「何か」を融合させて、キャラクターを作ろう！

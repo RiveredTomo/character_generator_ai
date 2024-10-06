@@ -57,8 +57,6 @@ export async function POST(req: Request) {
       .getPublicUrl(fileName);
     const filePass = urlData.data.publicUrl;
 
-    console.log(filePass);
-
     // 画像表示用のファイルパスを返す
     return NextResponse.json({
       filePass: filePass,
