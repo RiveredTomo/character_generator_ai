@@ -37,7 +37,7 @@ const Header = () => {
   // HeaderコンポーネントがレンダリングされたときにgetCurrentUser関数が実行される
   useEffect(() => {
     getCurrentUser();
-  }, []);
+  }, [getCurrentUser]);
 
   return (
     <header className="sticky top-0 z-10 bg-primary text-white w-full">

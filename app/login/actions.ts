@@ -10,7 +10,7 @@ export async function checkLogin() {
   const supabase = createClient();
 
   // ユーザー情報取得
-  const { data, error } = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getUser();
   // ログインしていれば作成ページへリダイレクト
   if (data?.user) {
     redirect("/create");
