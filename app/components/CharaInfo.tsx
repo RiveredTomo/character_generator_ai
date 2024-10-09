@@ -32,7 +32,7 @@ const CharaInfo = ({ charaName, characteristic, imagePass }: Props) => {
             <div className="skeleton h-10 w-44 md:w-64"></div>
           )}
           {characteristic ? (
-            <p className="md:text-2xl">{characteristic}</p>
+            <p className="md:text-2xl text-justify">{characteristic}</p>
           ) : (
             <>
               <div className="skeleton h-4 w-full"></div>

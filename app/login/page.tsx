@@ -17,7 +17,7 @@ export default function Login() {
       <form className="my-8 mx-auto px-5 flex items-center flex-col gap-10 w-full max-w-screen-sm">
         <h1 className="text-2xl md:text-5xl font-extrabold">ログイン</h1>
         <label className="input input-primary flex items-center gap-2 w-full">
-          Email
+          ユーザーID
           <input
             type="email"
             name="email"
@@ -27,7 +27,7 @@ export default function Login() {
           />
         </label>
         <label className="input input-primary flex items-center gap-2 w-full">
-          PassWord
+          パスワード
           <input
             type="password"
             name="password"
