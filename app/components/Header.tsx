@@ -3,12 +3,12 @@
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { IoPower } from "react-icons/io5";
+import { IoPower, IoReorderThreeSharp, IoPerson } from "react-icons/io5";
 
 const Header = () => {
   const supabase = createClient();
   const router = useRouter();
-  const [currentUser, setcurrentUser] = useState("");
+  const [currentUser, setcurrentUser] = useState<string | null>(null);
 
   // 現在ログインしているユーザーを取得する処理
   const getCurrentUser = async () => {
@@ -22,6 +22,8 @@ const Header = () => {
       } = await supabase.auth.getUser();
       // currentUserにユーザーのメールアドレスを格納
       setcurrentUser(user!.email!);
+    } else {
+      setcurrentUser("NoLogin");
     }
   };
 
@@ -41,23 +43,57 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-10 bg-primary text-white w-full">
-      <div className="flex justify-between items-center p-2 max-w-screen-xl mx-auto">
+      <div className="flex justify-between items-center p-2 max-w-screen-xl mx-auto h-14">
+        <input id="my-drawer" type="checkbox" className="drawer-toggle" />
         <a href="/" className="font-extrabold">
           融合キャラジェネレーター
         </a>
-        {currentUser ? (
-          <div className="flex items-center gap-2">
-            {currentUser}
-            <button className="btn btn-sm btn-ghost" onClick={doLogout}>
-              <IoPower />
-              ログアウト
-            </button>
-          </div>
-        ) : (
+        {currentUser === null ? (
+          <span className="btn btn-sm btn-ghost"></span>
+        ) : currentUser === "NoLogin" ? (
           <a href="/login" className="btn btn-sm btn-ghost">
             ログイン
           </a>
+        ) : (
+          <div className="flex items-center gap-2">
+            <div className="drawer-content">
+              <label
+                htmlFor="my-drawer"
+                className="drawer-button text-4xl cursor-pointer"
+              >
+                <IoReorderThreeSharp />
+              </label>
+            </div>
+          </div>
         )}
+        <div className="drawer-side">
+          <label
+            htmlFor="my-drawer"
+            aria-label="close sidebar"
+            className="drawer-overlay"
+          ></label>
+          <ul className="bg-primary flex flex-col justify-between gap-3 min-h-full w-80 p-4 [&>li]:flex [&>li]:justify-center [&>li]:items-center [&>li]:w-full [&>li>a]:text-xl">
+            <li className="gap-2">
+              <IoPerson />
+              {currentUser}
+            </li>
+            <li>
+              <a href="/create" className="btn btn-ghost w-full">
+                融合キャラを作る
+              </a>
+            </li>
+            <li className="flex-1"></li>
+            <li>
+              <button
+                className="btn btn-ghost w-full text-xl"
+                onClick={doLogout}
+              >
+                <IoPower />
+                ログアウト
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </header>
   );
