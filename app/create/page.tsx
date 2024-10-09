@@ -1,18 +1,30 @@
 "use client";
 
+import { checkUser, incrementCount } from "./actions";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CharaInfo from "@/components/CharaInfo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 
 export default function Create() {
+  const [count, setCount] = useState<number | null>(null);
   const [material_1, setMaterial_1] = useState("");
   const [material_2, setMaterial_2] = useState("");
   const [charaName, setCharaName] = useState("");
   const [characteristic, setCharacteristic] = useState("");
   const [imagePass, setImagePass] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // ユーザーのチェック
+  useEffect(() => {
+    const fetchUserCount = async () => {
+      const cnt = await checkUser();
+      setCount(cnt);
+    };
+
+    fetchUserCount();
+  }, [isLoading]);
 
   // Geminiでキャラクターの名前と特徴、画像生成用のプロンプトを生成
   const fetchGeminiData = async () => {
@@ -44,6 +56,11 @@ export default function Create() {
     // 入力されていなければ終了
     if (!material_1 || !material_2) return;
 
+    if (!count || count <= 0) {
+      alert("本日の利用可能回数の上限に達しました。明日までお待ち下さい。");
+      return;
+    }
+
     // ローディングフラグをオン
     setIsLoading(true);
     // 空にする
@@ -60,8 +77,8 @@ export default function Create() {
       // 画像生成用のプロンプトをStable Diffusion渡す
       const fireworksData = await fetchFireworksData(dataObj.imagePrompt);
       // 画像パスをセット
-      console.log(fireworksData.filePass);
       setImagePass(fireworksData.filePass);
+      if (!incrementCount()) alert("エラーが発生しました。");
     } catch (error) {
       console.error("Error:", error);
       alert("エラーが発生しました。");
@@ -105,19 +122,30 @@ export default function Create() {
             placeholder="「何か」その2"
           />
         </div>
-        <button
-          onClick={onClickHandler}
-          className="btn btn-lg btn-primary w-full md:w-auto"
-          disabled={
-            material_1 === "" || material_2 === "" || isLoading !== false
-          }
-        >
-          {isLoading ? (
-            <span className="loading loading-spinner loading-md"></span>
-          ) : (
-            "融合させる"
-          )}
-        </button>
+        <div className="text-center">
+          <button
+            onClick={onClickHandler}
+            className="btn btn-lg btn-primary w-full md:w-auto"
+            disabled={
+              material_1 === "" ||
+              material_2 === "" ||
+              isLoading !== false ||
+              !count ||
+              count <= 0
+            }
+          >
+            {isLoading ? (
+              <span className="loading loading-spinner loading-md"></span>
+            ) : (
+              "融合させる"
+            )}
+          </button>
+          <p className="mt-5">
+            {count !== null
+              ? "本日の残り回数：" + count + "回"
+              : "残り回数を読み込み中…"}
+          </p>
+        </div>
         <div className="w-full" hidden={!isLoading && !charaName}>
           <CharaInfo
             charaName={charaName}

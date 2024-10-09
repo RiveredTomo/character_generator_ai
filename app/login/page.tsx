@@ -1,11 +1,16 @@
 "use client";
 
-// import { createClient } from "@/utils/supabase/client";
-import { login } from "./actions";
+import { login, checkLogin } from "./actions";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useEffect } from "react";
 
 export default function Login() {
+  // ログインしているか確認
+  useEffect(() => {
+    checkLogin();
+  }, []);
+
   return (
     <main className="min-h-screen">
       <Header />

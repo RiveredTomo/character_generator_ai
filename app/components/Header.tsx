@@ -14,7 +14,6 @@ const Header = () => {
   const getCurrentUser = async () => {
     // ログインのセッションを取得する処理
     const { data } = await supabase.auth.getSession();
-    console.log(data);
     // セッションがあるときだけ現在ログインしているユーザーを取得する
     if (data.session !== null) {
       // supabaseに用意されている現在ログインしているユーザーを取得する関数

@@ -5,6 +5,18 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/server";
 
+// ログインチェック処理
+export async function checkLogin() {
+  const supabase = createClient();
+
+  // ユーザー情報取得
+  const { data, error } = await supabase.auth.getUser();
+  // ログインしていれば作成ページへリダイレクト
+  if (data?.user) {
+    redirect("/create");
+  }
+}
+
 // ログイン処理
 export async function login(formData: FormData) {
   const supabase = createClient();
