@@ -7,7 +7,7 @@ const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash",
   generationConfig: {
     temperature: 2,
-    responseMimeType: "application/json",
+    responseMimeType: "application/json", // JSONモードを使用
     responseSchema: {
       type: SchemaType.OBJECT,
       properties: {

@@ -59,7 +59,8 @@ export async function POST(req: Request) {
 
     // 画像表示用のファイルパスを返す
     return NextResponse.json({
-      filePass: filePass,
+      fileName,
+      filePass,
     });
   } catch (error) {
     console.error("Error:", error); // エラーをログに記録
